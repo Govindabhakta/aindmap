@@ -80,6 +80,25 @@ def generate_graph(sentence, sent_arr):
                 if (keywords_dict[word] > keywords_dict[connect]):
                     graph_dict[word].add(connect)
 
+    popping_key = []
+    
+    for key1,values1 in graph_dict.items():
+        for key2, values2 in graph_dict.items():
+            if (key1 != key2) and (values1 == values2):
+                tempstring = key1 + " & " + key2
+                graph_dict[tempstring] = graph_dict.pop(key1)
+                popping_key.append(key2)
+            elif (key1 != key2) and (values1.issubset(values2)):
+                graph_dict[key2].add(key1)
+                popping_key.append(key1)
+            elif (key1 != key2) and (values2.issubset(values1)):
+                graph_dict[key1].add(key2)
+                popping_key.append(key2)
+
+    for key in popping_key:
+        if(key in graph_dict):
+            graph_dict.pop(key)
+
     return graph_dict
 
 
@@ -99,20 +118,20 @@ def generate_nodes(graph_dict, sent_arr):
 
     nodes = []
 
-    for key in keywords:
-      node = {}
-      node["id"] = key
-      node["name"] = key
-      node["val"] = keywords_dict[key]
-      nodes.append(node)
+    for key in graph_dict:
+        node = {}
+        node["id"] = key
+        node["name"] = key
+        node["val"] = keywords_dict[key]
+        nodes.append(node)
 
     links = []
 
     for key in graph_dict.keys():
-      link = {}
-      link["source"] = "root"
-      link["target"] = key
-      links.append(link)
+        link = {}
+        link["source"] = "root"
+        link["target"] = key
+        links.append(link)
 
     for key, values in graph_dict.items():
       link = {}
