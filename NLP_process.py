@@ -160,5 +160,5 @@ def process_text(text):
 
     return nodes, links
 
-if __name__ == "__main__":
-    print(process_text(text))
+# if __name__ == "__main__":
+#     print(process_text(text))
