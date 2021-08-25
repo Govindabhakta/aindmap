@@ -96,6 +96,23 @@ def generate_graph(sentence, sent_arr):
         if (key in graph_dict):
             graph_dict.pop(key)
 
+    MiddleArray = []
+    for key in add:
+        if('&' in key):
+            MiddleArray.append(key)
+            
+    for key1 in MiddleArray:
+        for key2 in MiddleArray:
+            if ((key1 != key2) and (sorted(key1) == sorted(key2))):
+                if(key2 in graph_dict.values()):
+                    print(key1)
+                    add.pop(key1)
+                    MiddleArray.remove(key1)
+                else:
+                    print(key2)
+                    add.pop(key2)
+                    MiddleArray.remove(key2)
+    
     graph_dict.update(add)
 
     return graph_dict
