@@ -12,12 +12,6 @@ import spacy
 nlp = spacy.load('en_core_web_sm')
 nlp.add_pipe("textrank")
 
-text = '''
-From the beginning, Obama’s team was invested in constructing a certain image of what would be deemed a “historic” presidency. During Obama’s campaign, the artist Shepard Fairey, who designed the famous “Hope” poster, was widely acknowledged as his key iconographer. But, in retrospect, who Obama was and what he represented endures in the public imagination thanks to the work of the White House photographer Pete Souza, a longtime photojournalist who first had the assignment under Ronald Reagan. Over time, Souza helped create a new image of race in the US. This was an image of a postracial nation, where postracial didn’t mean liberation – it meant a US where race was solely affect and gesture, rather than the old brew of capital, land and premature death. Progress would deposit us in a place where black would be pure style – a style that the ruling class could finally wear out.
-In the thick of the 2008 primary, in an essay titled Native Son, George Packer argued that after a half century when “rightwing populism has been the most successful political force in America”, there was finally hope for an alternative. “Obama is a black candidate,” he wrote, “who can tell Americans of all races to move beyond race.” The ensuing years bore out the impossibility of that widely held belief, but it was already evident in the language. How could a single person be black and capable of moving everybody beyond race?
-'''
-
-
 def generate_summary(text):
     doc = nlp(text)
 
@@ -81,13 +75,16 @@ def generate_graph(sentence, sent_arr):
                     graph_dict[word].add(connect)
 
     popping_key = []
-    
-    for key1,values1 in graph_dict.items():
+
+    add = {}
+
+    for key1, values1 in graph_dict.items():
         for key2, values2 in graph_dict.items():
             if (key1 != key2) and (values1 == values2):
                 tempstring = key1 + " & " + key2
-                graph_dict[tempstring] = graph_dict.pop(key1)
+                add[tempstring] = graph_dict[key1] #Gw ubah soalnya error ganti key
                 popping_key.append(key2)
+                popping_key.append(key1)
             elif (key1 != key2) and (values1.issubset(values2)):
                 graph_dict[key2].add(key1)
                 popping_key.append(key1)
@@ -96,8 +93,10 @@ def generate_graph(sentence, sent_arr):
                 popping_key.append(key2)
 
     for key in popping_key:
-        if(key in graph_dict):
+        if (key in graph_dict):
             graph_dict.pop(key)
+
+    graph_dict.update(add)
 
     return graph_dict
 
@@ -119,19 +118,19 @@ def generate_nodes(graph_dict, sent_arr):
     nodes = []
 
     for key in graph_dict:
-        node = {}
-        node["id"] = key
-        node["name"] = key
-        node["val"] = keywords_dict[key]
-        nodes.append(node)
+      node = {}
+      node["id"] = key
+      node["name"] = key
+      node["val"] = graph_dict[key]
+      nodes.append(node)
 
     links = []
 
     for key in graph_dict.keys():
-        link = {}
-        link["source"] = "root"
-        link["target"] = key
-        links.append(link)
+      link = {}
+      link["source"] = "root"
+      link["target"] = key
+      links.append(link)
 
     for key, values in graph_dict.items():
       link = {}
@@ -159,6 +158,3 @@ def process_text(text):
     nodes, links = generate_nodes(graph_dict, sentences_arr)
 
     return nodes, links
-
-# if __name__ == "__main__":
-#     print(process_text(text))
