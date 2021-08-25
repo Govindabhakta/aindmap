@@ -6,6 +6,8 @@ import { MindMap } from './MindMap';
 import { useEffect, useState } from 'react';
 import { testData, testData2 } from "./test";
 
+import axios from 'axios'
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
@@ -21,13 +23,24 @@ function App() {
     console.log(e.target[1].value);
 
     // Send it to the backend
-    if (!clicked)
-    {
-      setDiagram(testData2);
-    } else {
-      setDiagram();
-    }
-    toggle(!clicked);
+    // if (!clicked)
+    // {
+    //   setDiagram(testData2);
+    // } else {
+    //   setDiagram();
+    // }
+    // toggle(!clicked);
+    axios.post('http://127.0.0.1:5000/get-mindmap', {
+      text: e.target[1].value
+    }).then( function(res) {
+      let data = {}
+      data.nodes = res.data.nodes;
+      data.links = res.data.links;
+
+      console.log(data);
+      setDiagram(data);
+    })
+
   }
 
   return (
