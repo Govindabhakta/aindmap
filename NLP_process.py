@@ -124,11 +124,18 @@ def generate_nodes(graph_dict, sent_arr):
     nodes.append(rootnode)
 
     for key in graph_dict:
-      node = {}
-      node["id"] = key
-      node["name"] = key
-      node["val"] = graph_dict[key]
-      nodes.append(node)
+        node = {}
+        node["id"] = key
+        node["name"] = key
+        node["val"] = graph_dict[key]
+        nodes.append(node)
+    for value in graph_dict[key]:
+            node2 = {}
+            node2["id"] = value
+            node2["name"] = value
+            node["val"] = 2
+            if (node2 not in nodes):
+                nodes.append(node2)
 
     links = []
 

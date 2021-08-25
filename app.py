@@ -27,6 +27,8 @@ def get_model_results():
 
     json_load = json.loads(json_dump)
 
+    print(json_load)
+
     return jsonify(
         json_load
     )
