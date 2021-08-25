@@ -20,8 +20,8 @@ def get_model_results():
     mindmap_nodes, node_links = NLP_process.process_text(data['text'])
 
     json_dump = json.dumps({
-            'mindmap_nodes': list(mindmap_nodes),
-            'node_links': list(node_links)
+            'nodes': list(mindmap_nodes),
+            'links': list(node_links)
         }, cls=SetEncoder)
 
     json_load = json.loads(json_dump)
