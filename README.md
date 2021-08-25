@@ -3,6 +3,7 @@
 # How to run program locally
 ### FRONT END
 - cd frontend
+- npm install
 - npm start
 
 ### BACK END
@@ -11,3 +12,6 @@
 - pip install -r requirements
 - python -m spacy download en_core_web_sm
 - python app.py
+
+## KNOWN BUGS
+- beberapa node tidak terdaftar untuk beberapa tipe artikel, jika terjadi grafik muncul setelah input gerakan scroll wheel
