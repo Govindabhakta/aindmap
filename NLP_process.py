@@ -117,6 +117,12 @@ def generate_nodes(graph_dict, sent_arr):
 
     nodes = []
 
+    rootnode = {}
+    rootnode["id"] = "root"
+    rootnode["name"] = "root"
+    rootnode["val"] = "0"
+    nodes.append(rootnode)
+
     for key in graph_dict:
       node = {}
       node["id"] = key
