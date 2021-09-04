@@ -8,7 +8,7 @@ import { ForceGraph2D, ForceGraph3D } from 'react-force-graph';
 import * as THREE from "three";
 import { CSS2DObject, CSS2DRenderer } from 'three-css2drenderer';
 
-export const MindMap = ({json, autoPosition}) => {
+export const MindMap = ({json, autoPosition, dimensions}) => {
     const ref = useRef()
     const graph = useRef()
     const [height, setHeight] = useState(1920)
@@ -29,6 +29,7 @@ export const MindMap = ({json, autoPosition}) => {
     return(
         <div id="graph" ref={ref}>
             <ForceGraph3D
+                numDimensions={dimensions}
                 backgroundColor="black"
                 graphData={json}
                 nodeThreeObject={node => {

@@ -17,6 +17,7 @@ function App() {
   const [diagram, setDiagram] = useState();
   const [clicked, toggle] = useState(false);
   const [sum, toggleSum] = useState(false);
+  const [dims, setDimensions] = useState(2);
 
   function sendMindMapData(e)
   {
@@ -38,28 +39,28 @@ function App() {
 
     console.log(p_c);
     // Send it to the backend
-    if (!clicked)
-    {
-      setDiagram(testData4);
-    } else {
-      setDiagram();
-    }
-    toggle(!clicked);
+    // if (!clicked)
+    // {
+    //   setDiagram(testData4);
+    // } else {
+    //   setDiagram();
+    // }
+    // toggle(!clicked);
 
-    // axios.post('http://127.0.0.1:5000/get-mindmap', {
-    //   text: e.target[1].value,
-    //   title: e.target[0].value,
-    //   phrases_count: p_c
-    // }).then( function(res) {
-    //   let data = {}
-    //   data.nodes = res.data.nodes;
-    //   data.links = res.data.links;
-    //   data.summary_text = res.data.summary_text
-    //   data.summary_arr = res.data.summary_arr
+    axios.post('http://127.0.0.1:5000/get-mindmap', {
+      text: e.target[1].value,
+      title: e.target[0].value,
+      phrases_count: p_c
+    }).then( function(res) {
+      let data = {}
+      data.nodes = res.data.nodes;
+      data.links = res.data.links;
+      data.summary_text = res.data.summary_text
+      data.summary_arr = res.data.summary_arr
 
-    //   console.log(data);
-    //   setDiagram(data);
-    // })
+      console.log(data);
+      setDiagram(data);
+    })
 
   }
 
@@ -67,6 +68,16 @@ function App() {
   {
     toggleSum(!sum);
     return;
+  }
+
+  function changeDims()
+  {
+    if (dims == 2)
+    {
+      setDimensions(3)
+    } else {
+      setDimensions(2)
+    }
   }
 
   function getForm()
@@ -105,7 +116,8 @@ function App() {
                   <Button variant="primary" type="submit" disabled={sum}>
                     Create Mind Map
                   </Button>
-                  <Button onClick={() => {toggleSummary()}} style={{marginLeft: "15px"}} disabled={!diagram}>Show Summary</Button>  
+                  <Button onClick={() => {toggleSummary()}} style={{marginLeft: "15px"}} disabled={!diagram}>Show Summary</Button>
+                  <Button onClick={() => {changeDims()}} style={{marginLeft: "15px"}}>Change View</Button>  
                 </div>
 
 
@@ -117,7 +129,7 @@ function App() {
 
           {/* Graph */}
           <Col md={8} xs={12} style={{height: "100vh", padding: "0"}}>
-            <MindMap json={diagram} autoPosition={true}></MindMap>
+            <MindMap json={diagram} autoPosition={true} dimensions={dims}></MindMap>
           </Col>
         </Row>
       </Container>
