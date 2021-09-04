@@ -142,9 +142,9 @@ def generate_nodes(graph_dict, sent_arr):
         node = {}
         node["id"] = key
         node["name"] = key
-        node["val"] = graph_dict[key]
+        node["val"] = 1
         nodes.append(node)
-    for value in graph_dict[key]:
+        for value in graph_dict[key]:
             node2 = {}
             node2["id"] = value
             node2["name"] = value
@@ -160,17 +160,13 @@ def generate_nodes(graph_dict, sent_arr):
       link["target"] = key
       links.append(link)
 
-    for key, values in graph_dict.items():
-      link = {}
-      if (isinstance(values, set)):
-        for value in values:
+    for key in graph_dict:
+        for value in graph_dict[key]:
+            link = {}
             link["source"] = key
             link["target"] = value
             links.append(link)
-      else:
-          link["source"] = key
-          link["target"] = value
-          links.append(link)
+
 
     return nodes, links
 
