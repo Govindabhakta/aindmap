@@ -38,28 +38,28 @@ function App() {
 
     console.log(p_c);
     // Send it to the backend
-    if (!clicked)
-    {
-      setDiagram(testData4);
-    } else {
-      setDiagram();
-    }
-    toggle(!clicked);
+    // if (!clicked)
+    // {
+    //   setDiagram(testData4);
+    // } else {
+    //   setDiagram();
+    // }
+    // toggle(!clicked);
 
-    // axios.post('http://127.0.0.1:5000/get-mindmap', {
-    //   text: e.target[1].value,
-    //   title: e.target[0].value,
-    //   phrases_count: p_c
-    // }).then( function(res) {
-    //   let data = {}
-    //   data.nodes = res.data.nodes;
-    //   data.links = res.data.links;
-    //   data.summary_text = res.data.summary_text
-    //   data.summary_arr = res.data.summary_arr
+    axios.post('http://127.0.0.1:5000/get-mindmap', {
+      text: e.target[1].value,
+      title: e.target[0].value,
+      phrases_count: p_c
+    }).then( function(res) {
+      let data = {}
+      data.nodes = res.data.nodes;
+      data.links = res.data.links;
+      data.summary_text = res.data.summary_text
+      data.summary_arr = res.data.summary_arr
 
-    //   console.log(data);
-    //   setDiagram(data);
-    // })
+      console.log(data);
+      setDiagram(data);
+    })
 
   }
 

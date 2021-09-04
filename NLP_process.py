@@ -175,9 +175,11 @@ def generate_nodes(graph_dict, sent_arr, title, relations_dict, sentence_dict, i
     nodes = []
 
     rootnode = {}
-    rootnode["id"] = title
+    rootnode["id"] = "-1"
     rootnode["name"] = title
     rootnode["val"] = "0"
+    rootnode["sentences"] = []
+    rootnode["sentences_index"] = []
     nodes.append(rootnode)
 
     i = 0
@@ -213,7 +215,7 @@ def generate_nodes(graph_dict, sent_arr, title, relations_dict, sentence_dict, i
 
     for key in graph_dict.keys():
       link = {}
-      link["source"] = title
+      link["source"] = "-1"
       link["target"] = key
       links.append(link)
 

@@ -29,10 +29,8 @@ def get_model_results():
 
     json_load = json.loads(json_dump)
 
-    # print(json_load)
-    print(mindmap_nodes)
-    print("#####################################################################")
-    print(node_links)
+    print(json_load)
+    # print(jsonify(json_load))
 
     return jsonify(
         json_load
