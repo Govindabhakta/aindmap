@@ -12,14 +12,19 @@ import spacy
 nlp = spacy.load('en_core_web_sm')
 nlp.add_pipe("textrank")
 
-def generate_summary(text):
+def generate_summary(text, phrases_count=None):
     doc = nlp(text)
 
     tr = doc._.textrank
 
     arr = []
 
-    for sent in tr.summary(limit_phrases=20, preserve_order=True):
+    limit_phrases = 20
+
+    if phrases_count != None:
+        limit_phrases = phrases_count
+
+    for sent in tr.summary(limit_phrases=limit_phrases, preserve_order=True):
         arr.append(str(sent).replace("\n", ""))
 
     return arr
@@ -125,7 +130,7 @@ def get_keywords_dict(sent_arr):
     return keywords_dict
 
 
-def generate_nodes(graph_dict, sent_arr):
+def generate_nodes(graph_dict, sent_arr, title):
     keywords = GetKeywords(" ".join(sent_arr))
 
     keywords_dict = get_keywords_dict(sent_arr)
@@ -133,8 +138,8 @@ def generate_nodes(graph_dict, sent_arr):
     nodes = []
 
     rootnode = {}
-    rootnode["id"] = "root"
-    rootnode["name"] = "root"
+    rootnode["id"] = title
+    rootnode["name"] = title
     rootnode["val"] = "0"
     nodes.append(rootnode)
 
@@ -156,7 +161,7 @@ def generate_nodes(graph_dict, sent_arr):
 
     for key in graph_dict.keys():
       link = {}
-      link["source"] = "root"
+      link["source"] = title
       link["target"] = key
       links.append(link)
 
@@ -171,14 +176,14 @@ def generate_nodes(graph_dict, sent_arr):
     return nodes, links
 
 
-def process_text(text):
-    sentences_arr = generate_summary(text)
+def process_text(text, phrases_count, title):
+    sentences_arr = generate_summary(text, phrases_count)
 
     graph_dict = dict()
 
     for i in sentences_arr:
         graph_dict.update(generate_graph(i, sentences_arr))
 
-    nodes, links = generate_nodes(graph_dict, sentences_arr)
+    nodes, links = generate_nodes(graph_dict, sentences_arr, title)
 
     return nodes, links
