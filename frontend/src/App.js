@@ -4,7 +4,7 @@ import './App.css';
 import { MindMap } from './MindMap';
 
 import { useEffect, useState } from 'react';
-import { testData, testData2, testData3 } from "./test";
+import { testData, testData2, testData3, testData4 } from "./test";
 
 import { Summary } from './Summary';
 
@@ -40,7 +40,7 @@ function App() {
     // Send it to the backend
     // if (!clicked)
     // {
-    //   setDiagram(testData3);
+    //   setDiagram(testData4);
     // } else {
     //   setDiagram();
     // }
