@@ -4,7 +4,7 @@ import './App.css';
 import { MindMap } from './MindMap';
 
 import { useEffect, useState } from 'react';
-import { testData, testData2 } from "./test";
+import { testData, testData2, testData3 } from "./test";
 
 import axios from 'axios'
 
@@ -21,12 +21,19 @@ function App() {
     console.clear();
     console.log(e.target[0].value);
     console.log(e.target[1].value);
-    console.log(e.target[2].value);
 
+
+    let p_c = 20
+    if (e.target[2].value)
+    {
+      p_c = parseInt(e.target[2].value)
+    }
+
+    console.log(p_c);
     // Send it to the backend
     // if (!clicked)
     // {
-    //   setDiagram(testData2);
+    //   setDiagram(testData3);
     // } else {
     //   setDiagram();
     // }
@@ -34,7 +41,7 @@ function App() {
     axios.post('http://127.0.0.1:5000/get-mindmap', {
       text: e.target[1].value,
       title: e.target[0].value,
-      phrases_count: parseInt(e.target[2].value)
+      phrases_count: p_c
     }).then( function(res) {
       let data = {}
       data.nodes = res.data.nodes;

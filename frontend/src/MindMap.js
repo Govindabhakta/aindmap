@@ -1,5 +1,6 @@
 import { useState, useLayoutEffect, useRef, useEffect } from "react";
 import * as d3 from 'd3';
+import SpriteText from "three-spritetext";
 
 import { ForceGraph2D } from 'react-force-graph';
 
@@ -43,6 +44,9 @@ export const MindMap = ({json, autoPosition}) => {
                         ctx.fillText(label, node.x, node.y);
 
                         node.__bckgDimensions = bckgDimensions; // to re-use in nodePointerAreaPaint
+                    }}
+                    linkLabel={link => {
+                        return link.explanation
                     }}
                     nodePointerAreaPaint={(node, color, ctx) => {
                         ctx.fillStyle = color;
