@@ -18,11 +18,13 @@ class SetEncoder(json.JSONEncoder):
 def get_model_results():
     data = request.get_json()
 
-    mindmap_nodes, node_links = NLP_process.process_text(data['text'], data['phrases_count'], data['title'])
+    mindmap_nodes, node_links, summary_text, sentences_arr = NLP_process.process_text(data['text'], data['phrases_count'], data['title'])
 
     json_dump = json.dumps({
             'nodes': list(mindmap_nodes),
-            'links': list(node_links)
+            'links': list(node_links),
+            'summary_text': summary_text,
+            'summary_arr': sentences_arr
         }, cls=SetEncoder)
 
     json_load = json.loads(json_dump)

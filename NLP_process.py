@@ -59,6 +59,7 @@ def GetKeywordScore(tex):
 
 def generate_graph(sentence, sent_arr):
     graph_dict = defaultdict(set)
+    relations_dict = {}
     sentence_nlp = nlp(sentence)
 
     keywords_dict = get_keywords_dict(sent_arr)
@@ -78,6 +79,8 @@ def generate_graph(sentence, sent_arr):
             for connect in keychunk:
                 if (keywords_dict[word] > keywords_dict[connect]):
                     graph_dict[word].add(connect)
+                    tokentuple = (word, connect)
+                    relations_dict[tokentuple] = sent.root.orth_
 
     popping_key = []
 
@@ -118,7 +121,16 @@ def generate_graph(sentence, sent_arr):
     
     graph_dict.update(add)
 
-    return graph_dict
+    for key in graph_dict:
+        if '&' in key:
+            splitkey = key.split(' & ')
+            for i in splitkey:
+                for value in graph_dict[key]:
+                    temptuple = (i, value)
+                    if temptuple in relations_dict:
+                        relations_dict[(key,value)] = relations_dict[temptuple]
+
+    return graph_dict, relations_dict
 
 
 def get_keywords_dict(sent_arr):
@@ -130,7 +142,7 @@ def get_keywords_dict(sent_arr):
     return keywords_dict
 
 
-def generate_nodes(graph_dict, sent_arr, title):
+def generate_nodes(graph_dict, sent_arr, title, relations_dict):
     keywords = GetKeywords(" ".join(sent_arr))
 
     keywords_dict = get_keywords_dict(sent_arr)
@@ -143,19 +155,23 @@ def generate_nodes(graph_dict, sent_arr, title):
     rootnode["val"] = "0"
     nodes.append(rootnode)
 
+    i = 0
+
     for key in graph_dict:
         node = {}
         node["id"] = key
         node["name"] = key
         node["val"] = 1
         nodes.append(node)
+        i += 1
         for value in graph_dict[key]:
             node2 = {}
             node2["id"] = value
             node2["name"] = value
             node["val"] = 2
-            if (node2 not in nodes):
+            if (node2 not in nodes and (key,value) in relations_dict):
                 nodes.append(node2)
+                i += 1
 
     links = []
 
@@ -170,6 +186,10 @@ def generate_nodes(graph_dict, sent_arr, title):
             link = {}
             link["source"] = key
             link["target"] = value
+            if (key,value) in relations_dict:
+                link["explanation"] = relations_dict[(key,value)]
+            else:
+                link["explanation"] = ""
             links.append(link)
 
 
@@ -179,11 +199,18 @@ def generate_nodes(graph_dict, sent_arr, title):
 def process_text(text, phrases_count, title):
     sentences_arr = generate_summary(text, phrases_count)
 
+    summary_text = " ".join(sentences_arr)
+
+    print(summary_text)
+
     graph_dict = dict()
+    relations_dict = dict()
 
     for i in sentences_arr:
-        graph_dict.update(generate_graph(i, sentences_arr))
+        gen = generate_graph(i, sentences_arr)
+        graph_dict.update(gen[0])
+        relations_dict.update(gen[1])
 
-    nodes, links = generate_nodes(graph_dict, sentences_arr, title)
+    nodes, links = generate_nodes(graph_dict, sentences_arr, title, relations_dict)
 
-    return nodes, links
+    return nodes, links, summary_text, sentences_arr
