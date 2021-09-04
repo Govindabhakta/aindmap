@@ -2,7 +2,11 @@ import { useState, useLayoutEffect, useRef, useEffect } from "react";
 import * as d3 from 'd3';
 import SpriteText from "three-spritetext";
 
-import { ForceGraph2D } from 'react-force-graph';
+import { useStore } from './useStore'
+
+import { ForceGraph2D, ForceGraph3D } from 'react-force-graph';
+import * as THREE from "three";
+import { CSS2DObject, CSS2DRenderer } from 'three-css2drenderer';
 
 export const MindMap = ({json, autoPosition}) => {
     const ref = useRef()
@@ -16,9 +20,65 @@ export const MindMap = ({json, autoPosition}) => {
         console.log(height, width)
     })
 
+    const [ setSentences, currentSentences] = useStore((state) => [
+        state.setSentences,
+        state.currentSentences
+    ])
+
     return(
         <div id="graph" ref={ref}>
-            <ForceGraph2D
+            <ForceGraph3D
+                backgroundColor="black"
+                graphData={json}
+                nodeThreeObject={node => {
+                    const sprite = new SpriteText(node.id)
+                    sprite.color = "white";
+                    sprite.textHeight = 2;
+                    return sprite;
+                    // const nodeEl = document.createElement('div');
+                    // nodeEl.textcontent = node.id;
+                    // nodeEl.style.color = "white";
+                    
+                    // return new CSS2DObject(nodeEl);
+                }}
+                nodeLabel={node => {
+                    return node.name + "hello"
+                }}
+
+                onNodeClick={(node, event) => {
+                    setSentences([2])
+                }}
+
+                width={width}
+                height={height}
+
+                linkDirectionalArrowLength={1}
+                linkDirectionalArrowRelPos={1}
+
+                linkThreeObjectExtend={true}
+                linkThreeObject={link => {
+                    // extend link with text sprite
+                    const sprite = new SpriteText(`${link.explanation}`);
+                    sprite.color = 'lightblue';
+                    sprite.textHeight = 1;
+                    return sprite;
+                }}
+                linkPositionUpdate={(sprite, { start, end }) => {
+                    const middlePos = Object.assign(...['x', 'y', 'z'].map(c => ({
+                    [c]: start[c] + (end[c] - start[c]) / 2 // calc middle point
+                    })));
+
+                    // Position sprite
+                    Object.assign(sprite.position, middlePos);
+                }}
+                linkColor="white"
+                linkWidth={0.4}
+                linkOpacity={0.2}
+                linkDirectionalParticles={2}
+                linkDirectionalParticleSpeed={0.0025}
+                >
+            </ForceGraph3D>
+            {/* <ForceGraph2D
                     graphData={json}
                     nodeAutoColorBy="group"
                     height={height}
@@ -55,7 +115,7 @@ export const MindMap = ({json, autoPosition}) => {
                     }}
 
                     dagNodeFilter={node => false}
-            />
+            /> */}
         </div>
     
     )
