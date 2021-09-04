@@ -25,7 +25,6 @@ function App() {
     console.log(e.target[0].value);
     console.log(e.target[1].value);
 
-
     let p_c = 20
     if (e.target[2].value)
     {
@@ -76,15 +75,15 @@ function App() {
       <>
         <Form.Group className="mb-3" controlId="form.ArticleTitle">
           <Form.Label style={{color: "#999999"}}>Article Title</Form.Label>
-          <Form.Control type="text" placeholder="" autocomplete="off" style={{backgroundColor:"#222222", border: "0px"}}/>
+          <Form.Control type="text" placeholder="" autocomplete="off" style={{backgroundColor:"#222222", border: "0px", color: "white"}}/>
         </Form.Group>
         <Form.Group className="mb-3" controlId="formorm.ArticleText" autocomplete="off">
           <Form.Label style={{color: "#999999"}}>Raw Text</Form.Label>
-          <Form.Control as="textarea" rows={20} style={{backgroundColor:"#222222", border: "0px", resize:"none"}}/>
+          <Form.Control as="textarea" rows={20} style={{backgroundColor:"#222222", border: "0px", resize:"none", color: "white"}}/>
         </Form.Group>
         <Form.Group className="mb-3" controlId="form.PhraseCount" autocomplete="off">
           <Form.Label style={{color: "#999999"}}>Phrase Count</Form.Label>
-          <Form.Control type="number" placeholder="Default: 20" style={{backgroundColor:"#222222", border: "0px"}}></Form.Control>
+          <Form.Control type="number" placeholder="Default: 20" style={{backgroundColor:"#222222", border: "0px", color: "white"}}></Form.Control>
         </Form.Group>
       </>
     )

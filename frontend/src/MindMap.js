@@ -42,11 +42,16 @@ export const MindMap = ({json, autoPosition}) => {
                     // return new CSS2DObject(nodeEl);
                 }}
                 nodeLabel={node => {
-                    return node.name + "hello"
+                    if (node.sentences.length > 1)
+                    {
+                        return node.sentences[0] + " and " + (node.sentences.length-1) + " more."
+                    } else {
+                        return node.sentences[0]
+                    }
                 }}
 
                 onNodeClick={(node, event) => {
-                    setSentences([2])
+                    setSentences(node.sentences_index)
                 }}
 
                 width={width}
