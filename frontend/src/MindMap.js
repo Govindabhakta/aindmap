@@ -37,9 +37,11 @@ export const MindMap = ({json, autoPosition, dimensions}) => {
                     sprite.color = "white";
                     if (node.id == "-1")
                     {
+                        console.log(node, "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
                         sprite.textHeight = 4;
-                        sprite.strokeWidth = 0.5;
-                        sprite.strokeColor = "white"
+                        sprite.strokeWidth = 0.75;
+                        sprite.strokeColor = "lightblue";
+                        // sprite.borderWidth = 0.1;
                     } else {
                         sprite.textHeight = 2;
                     }
