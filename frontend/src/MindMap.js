@@ -13,6 +13,7 @@ export const MindMap = ({json, autoPosition}) => {
     const graph = useRef()
     const [height, setHeight] = useState(1920)
     const [width, setWidth] = useState(1080)
+    const [titleFound, foundtitle] = useState(false)
 
     useLayoutEffect(() => {
         setHeight(ref.current.clientHeight)
@@ -31,9 +32,16 @@ export const MindMap = ({json, autoPosition}) => {
                 backgroundColor="black"
                 graphData={json}
                 nodeThreeObject={node => {
-                    const sprite = new SpriteText(node.id)
+                    const sprite = new SpriteText(node.name)
                     sprite.color = "white";
-                    sprite.textHeight = 2;
+                    if (node.id == "-1")
+                    {
+                        sprite.textHeight = 4;
+                        sprite.strokeWidth = 0.5;
+                        sprite.strokeColor = "white"
+                    } else {
+                        sprite.textHeight = 2;
+                    }
                     return sprite;
                     // const nodeEl = document.createElement('div');
                     // nodeEl.textcontent = node.id;
