@@ -184,7 +184,7 @@ def generate_nodes(graph_dict, sent_arr, title, relations_dict, sentence_dict, i
 
     for key in graph_dict:
         node = {}
-        node["id"] = i
+        node["id"] = key
         node["name"] = key
         node["val"] = 1
         node["sentences"] = sentence_dict[key]
@@ -197,7 +197,7 @@ def generate_nodes(graph_dict, sent_arr, title, relations_dict, sentence_dict, i
             i += 1
         for value in graph_dict[key]:
             node2 = {}
-            node2["id"] = i
+            node2["id"] = value
             node2["name"] = value
             node2["val"] = 2
             node2["sentences"] = sentence_dict[value]
