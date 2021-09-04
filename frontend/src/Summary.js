@@ -7,6 +7,8 @@ export const Summary = ({sentences}) => {
         state.currentSentences
     ])
 
+    useEffect(() => {}, [currentSentences]);
+
     return(
         <div>
             <h4 ><i style={{backgroundColor: "#444444", padding: "5px 15px 5px 15px", borderRadius: "5px"}}>Summary</i></h4>
