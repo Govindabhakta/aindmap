@@ -21,6 +21,7 @@ function App() {
     console.clear();
     console.log(e.target[0].value);
     console.log(e.target[1].value);
+    console.log(e.target[2].value);
 
     // Send it to the backend
     // if (!clicked)
@@ -32,8 +33,8 @@ function App() {
     // toggle(!clicked);
     axios.post('http://127.0.0.1:5000/get-mindmap', {
       text: e.target[1].value,
-      title: "title",
-      phrases_count: 20
+      title: e.target[0].value,
+      phrases_count: parseInt(e.target[2].value)
     }).then( function(res) {
       let data = {}
       data.nodes = res.data.nodes;
@@ -60,6 +61,10 @@ function App() {
                 <Form.Group className="mb-3" controlId="formorm.ArticleText" autocomplete="off">
                   <Form.Label>Raw Text</Form.Label>
                   <Form.Control as="textarea" rows={20} style={{resize: "none"}}/>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="form.PhraseCount" autocomplete="off">
+                  <Form.Label>Phrase Count</Form.Label>
+                  <Form.Control type="number" placeholder="Default: 20"></Form.Control>
                 </Form.Group>
 
                 <Button variant="primary" type="submit">
