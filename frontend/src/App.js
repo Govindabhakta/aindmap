@@ -105,7 +105,7 @@ function App() {
           <Form.Control as="textarea" rows={20} style={{backgroundColor:"#222222", border: "0px", resize:"none", color: "white"}}/>
         </Form.Group>
         <Form.Group className="mb-3" controlId="form.PhraseCount" autocomplete="off">
-          <Form.Label style={{color: "#999999"}}>Phrase Count</Form.Label>
+          <Form.Label style={{color: "#999999"}}>Phrase Count (Optional)</Form.Label>
           <Form.Control type="number" placeholder="Default: 20" style={{backgroundColor:"#222222", border: "0px", color: "white"}}></Form.Control>
         </Form.Group>
       </>
