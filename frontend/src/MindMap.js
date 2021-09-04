@@ -42,6 +42,7 @@ export const MindMap = ({json, autoPosition}) => {
                     // return new CSS2DObject(nodeEl);
                 }}
                 nodeLabel={node => {
+                    console.log(node);
                     if (node.sentences.length > 1)
                     {
                         return node.sentences[0] + " and " + (node.sentences.length-1) + " more."
