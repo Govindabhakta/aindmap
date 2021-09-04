@@ -31,7 +31,9 @@ function App() {
     // }
     // toggle(!clicked);
     axios.post('http://127.0.0.1:5000/get-mindmap', {
-      text: e.target[1].value
+      text: e.target[1].value,
+      title: "title",
+      phrases_count: 20
     }).then( function(res) {
       let data = {}
       data.nodes = res.data.nodes;
