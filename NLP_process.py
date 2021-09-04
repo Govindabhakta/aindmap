@@ -60,6 +60,14 @@ def GetKeywordScore(tex):
 def generate_graph(sentence, sent_arr):
     graph_dict = defaultdict(set)
     relations_dict = {}
+    sentence_dict = defaultdict()
+    idxsentence_dict = {}
+
+    idxSent = 0
+    for i in sent_arr:
+        idxsentence_dict[i] = idxSent
+        idxSent = idxSent + 1
+
     sentence_nlp = nlp(sentence)
 
     keywords_dict = get_keywords_dict(sent_arr)
@@ -81,6 +89,16 @@ def generate_graph(sentence, sent_arr):
                     graph_dict[word].add(connect)
                     tokentuple = (word, connect)
                     relations_dict[tokentuple] = sent.root.orth_
+                    if (word not in sentence_dict):
+                        sentence_dict[word] = [sent.orth_]
+                    else:
+                        if(sent.orth_ not in sentence_dict[word]):
+                            sentence_dict[word].append(sent.orth_)
+                    if (connect not in sentence_dict):
+                        sentence_dict[connect] = [sent.orth_]
+                    else:
+                        if (sent.orth_ not in sentence_dict[connect]):
+                            sentence_dict[connect].append(sent.orth_)
 
     popping_key = []
 
@@ -121,16 +139,23 @@ def generate_graph(sentence, sent_arr):
     
     graph_dict.update(add)
 
-    for key in graph_dict:
-        if '&' in key:
-            splitkey = key.split(' & ')
+    for key in graph_dict: #Key = A & B
+        if('&' in key):
+            splitkey = key.split(" & ") #
             for i in splitkey:
                 for value in graph_dict[key]:
-                    temptuple = (i, value)
-                    if temptuple in relations_dict:
+                    temptuple = (i,value)
+                    if(temptuple in relations_dict):
                         relations_dict[(key,value)] = relations_dict[temptuple]
+                    if(i in sentence_dict):
+                        sentence_dict[key] = sentence_dict[i]
+                    if ('&' in value):
+                        splitvalue = key.split(" & ")
+                        for j in splitvalue:
+                            if(j in sentence_dict):
+                                sentence_dict[value] = sentence_dict[j]
 
-    return graph_dict, relations_dict
+    return graph_dict, relations_dict, sentence_dict, idxsentence_dict
 
 
 def get_keywords_dict(sent_arr):
@@ -142,7 +167,7 @@ def get_keywords_dict(sent_arr):
     return keywords_dict
 
 
-def generate_nodes(graph_dict, sent_arr, title, relations_dict):
+def generate_nodes(graph_dict, sent_arr, title, relations_dict, sentence_dict, idxsentence_dict):
     keywords = GetKeywords(" ".join(sent_arr))
 
     keywords_dict = get_keywords_dict(sent_arr)
@@ -159,17 +184,28 @@ def generate_nodes(graph_dict, sent_arr, title, relations_dict):
 
     for key in graph_dict:
         node = {}
-        node["id"] = key
+        node["id"] = i
         node["name"] = key
         node["val"] = 1
-        nodes.append(node)
-        i += 1
+        node["sentences"] = sentence_dict[key]
+        indexarray = sentence_dict[key]
+        node["sentences_index"] = []
+        for el in indexarray:
+            node["sentences_index"].append(idxsentence_dict[el])
+        if(node not in nodes):
+            nodes.append(node)
+            i += 1
         for value in graph_dict[key]:
             node2 = {}
-            node2["id"] = value
+            node2["id"] = i
             node2["name"] = value
-            node["val"] = 2
-            if (node2 not in nodes and (key,value) in relations_dict):
+            node2["val"] = 2
+            node2["sentences"] = sentence_dict[value]
+            indexarray = sentence_dict[value]
+            node2["sentences_index"] = []
+            for el in indexarray:
+                node2["sentences_index"].append(idxsentence_dict[el])
+            if ((node2 not in nodes) and ((key,value) in relations_dict)):
                 nodes.append(node2)
                 i += 1
 
@@ -205,12 +241,16 @@ def process_text(text, phrases_count, title):
 
     graph_dict = dict()
     relations_dict = dict()
+    sentence_dict = dict()
+    idxsentence_dict = dict()
 
     for i in sentences_arr:
         gen = generate_graph(i, sentences_arr)
         graph_dict.update(gen[0])
         relations_dict.update(gen[1])
+        sentence_dict.update(gen[2])
+        idxsentence_dict.update(gen[3])
 
-    nodes, links = generate_nodes(graph_dict, sentences_arr, title, relations_dict)
+    nodes, links = generate_nodes(graph_dict, sentences_arr, title, relations_dict, sentence_dict, idxsentence_dict)
 
     return nodes, links, summary_text, sentences_arr
