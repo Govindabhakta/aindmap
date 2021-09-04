@@ -18,6 +18,7 @@ function App() {
   const [clicked, toggle] = useState(false);
   const [sum, toggleSum] = useState(false);
   const [dims, setDimensions] = useState(2);
+  const [moveP, setMoveP] = useState(Infinity);
 
   function sendMindMapData(e)
   {
@@ -80,6 +81,17 @@ function App() {
     }
   }
 
+  function changeMoveP()
+  {
+    if (moveP == Infinity)
+    {
+      setMoveP(0)
+    } else 
+    {
+      setMoveP(Infinity)
+    }
+  }
+
   function getForm()
   {
     return (
@@ -118,6 +130,7 @@ function App() {
                   </Button>
                   <Button onClick={() => {toggleSummary()}} style={{marginLeft: "15px"}} disabled={!diagram}>Show Summary</Button>
                   <Button onClick={() => {changeDims()}} style={{marginLeft: "15px"}}>Change View</Button>  
+                  <Button onClick={() => {changeMoveP()}} style={{marginLeft: "15px"}}>Autoplacement</Button>
                 </div>
 
 
@@ -129,7 +142,7 @@ function App() {
 
           {/* Graph */}
           <Col md={8} xs={12} style={{height: "100vh", padding: "0"}}>
-            <MindMap json={diagram} autoPosition={true} dimensions={dims}></MindMap>
+            <MindMap json={diagram} autoPosition={true} dimensions={dims} freemove={moveP}></MindMap>
           </Col>
         </Row>
       </Container>
